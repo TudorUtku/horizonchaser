@@ -88,6 +88,31 @@
     footer { padding:2rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:var(--muted); }
     footer a { color:var(--muted); text-decoration:none; }
     footer a:hover { color:var(--accent); }
+
+    /* PAYWALL MODAL */
+    .paywall-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:1.5rem; overflow-y:auto; }
+    .paywall-overlay.open { display:flex; }
+    .paywall-modal { background:var(--surface); border:1px solid var(--border); max-width:480px; width:100%; padding:2rem 1.5rem; position:relative; max-height:90vh; overflow-y:auto; }
+    .paywall-close { position:absolute; top:1rem; right:1rem; background:none; border:none; color:var(--muted); font-size:1.5rem; cursor:pointer; transition:color 0.3s; }
+    .paywall-close:hover { color:var(--accent); }
+    .paywall-lock { font-size:2rem; color:var(--accent); margin-bottom:0.8rem; text-align:center; }
+    .paywall-eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; text-align:center; }
+    .paywall-title { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:400; line-height:1.2; text-align:center; margin-bottom:0.8rem; }
+    .paywall-sub { font-size:0.85rem; color:var(--muted); line-height:1.7; text-align:center; margin-bottom:2rem; }
+    .paywall-options { display:flex; flex-direction:column; gap:1rem; }
+    .paywall-option { padding:1.2rem; border:1px solid var(--border); background:var(--bg); cursor:pointer; transition:all 0.3s; }
+    .paywall-option:hover { border-color:var(--accent); }
+    .paywall-option.recommended { border-color:var(--accent); }
+    .po-badge { display:inline-block; background:var(--accent); color:var(--bg); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.2rem 0.6rem; margin-bottom:0.5rem; }
+    .po-title { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:0.3rem; }
+    .po-desc { font-size:0.78rem; color:var(--muted); line-height:1.6; margin-bottom:0.8rem; }
+    .po-footer { display:flex; justify-content:space-between; align-items:center; }
+    .po-price { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--accent); }
+    .po-price span { font-size:0.75rem; color:var(--muted); font-family:'Jost',sans-serif; }
+    .po-btn { padding:0.6rem 1.2rem; background:var(--accent); color:var(--bg); border:none; font-family:'Jost',sans-serif; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; transition:opacity 0.3s; }
+    .po-btn:hover { opacity:0.85; }
+    .paywall-footer { margin-top:1.5rem; text-align:center; font-size:0.75rem; color:var(--muted); }
+    .paywall-footer a { color:var(--accent); text-decoration:none; }
   </style>
 </head>
 <body>
@@ -177,7 +202,7 @@
   <p class="feat-tag">Japonia · 15 Noiembrie 2024</p>
   <h2 class="feat-title">30 de zile în Japonia: tot ce nu îți spune ghidul turistic</h2>
   <p class="feat-excerpt">Am ajuns în Tokyo cu un rucsac, un JR Pass și zero așteptări clare. Am plecat cu 3.000 de fotografii, amintiri imposibil de descris în cuvinte și o înțelegere profundă a faptului că unele locuri nu pot fi înțelese — doar trăite.</p>
-  <a href="blog.html" class="read-more">Citește Articolul Complet</a>
+  <a href="#" class="read-more" onclick="event.preventDefault(); openPaywall();">Citește Articolul Complet</a>
 </div>
 
 <div class="newsletter">
@@ -195,13 +220,71 @@
   <a href="ghid.html">Ghid Premium →</a>
 </footer>
 
+<!-- PAYWALL MODAL -->
+<div class="paywall-overlay" id="paywall" onclick="closePaywallBg(event)">
+  <div class="paywall-modal">
+    <button class="paywall-close" onclick="closePaywall()">✕</button>
+    <div class="paywall-lock">🔒</div>
+    <p class="paywall-eyebrow">Conținut Premium</p>
+    <h2 class="paywall-title">Acest articol este pentru membri</h2>
+    <p class="paywall-sub">Alege una dintre opțiunile de mai jos pentru a avea acces instant la articolul complet și la toate celelalte materiale premium.</p>
+
+    <div class="paywall-options">
+
+      <div class="paywall-option recommended">
+        <span class="po-badge">Cel Mai Popular</span>
+        <div class="po-title">Abonament Lunar</div>
+        <p class="po-desc">Acces nelimitat la toate articolele premium, ghiduri PDF și comunitatea privată.</p>
+        <div class="po-footer">
+          <div class="po-price">35 lei <span>/ lună</span></div>
+          <button class="po-btn" onclick="alert('Procesare plată abonament — integrare Stripe de adăugat')">Abonează-mă</button>
+        </div>
+      </div>
+
+      <div class="paywall-option">
+        <div class="po-title">Articol Individual</div>
+        <p class="po-desc">Plătești o singură dată pentru acest articol specific, fără abonament.</p>
+        <div class="po-footer">
+          <div class="po-price">9 lei <span>plată unică</span></div>
+          <button class="po-btn" onclick="alert('Procesare plată unică — integrare Stripe de adăugat')">Cumpără</button>
+        </div>
+      </div>
+
+      <div class="paywall-option">
+        <div class="po-title">Pachet Anual</div>
+        <p class="po-desc">Acces complet timp de un an — economisești 30% față de lunar.</p>
+        <div class="po-footer">
+          <div class="po-price">299 lei <span>/ an</span></div>
+          <button class="po-btn" onclick="alert('Procesare plată anuală — integrare Stripe de adăugat')">Cumpără</button>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="paywall-footer">Ești deja membru? <a href="#" onclick="alert('Pagina de login — de adăugat'); return false;">Autentifică-te</a></p>
+  </div>
+</div>
+
 <script>
-  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+  function toggleMenu() {
+    document.getElementById('navMenu').classList.toggle('open');
+  }
   function subscribeNL() {
     const e = document.getElementById('nlEmail').value;
     if (!e) { alert('Introdu adresa de email.'); return; }
     alert('Te-ai abonat cu succes! Bine ai venit în comunitate 🌍');
     document.getElementById('nlEmail').value = '';
+  }
+  function openPaywall() {
+    document.getElementById('paywall').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePaywall() {
+    document.getElementById('paywall').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closePaywallBg(e) {
+    if (e.target === document.getElementById('paywall')) closePaywall();
   }
 </script>
 </body>
