@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorizonChaser – Contact</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b1012; --surface:#111a1e; --accent:#e8a04a; --accent2:#5dbfb0; --text:#f0ede8; --muted:#7a8a8f; --border:#1e2d33; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(11,16,18,0.93); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--accent); text-decoration:none; }
+    .nav-toggle { display:flex; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .nav-toggle span { display:block; width:24px; height:1px; background:var(--text); }
+    .nav-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:99; flex-direction:column; justify-content:center; align-items:center; gap:2rem; }
+    .nav-menu.open { display:flex; }
+    .nav-menu a { font-family:'Playfair Display',serif; font-size:2rem; color:var(--text); text-decoration:none; transition:color 0.3s; }
+    .nav-menu a:hover { color:var(--accent); }
+    .nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; background:none; border:none; color:var(--text); }
+
+    .page-header { padding:8rem 1.5rem 3rem; border-bottom:1px solid var(--border); }
+    .eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,10vw,4rem); line-height:1; }
+    .page-title em { font-style:italic; color:var(--accent); }
+
+    .contact-intro { padding:2rem 1.5rem; border-bottom:1px solid var(--border); }
+    .contact-intro p { font-size:0.85rem; line-height:1.8; color:var(--muted); }
+
+    .contact-details { padding:2rem 1.5rem; border-bottom:1px solid var(--border); }
+    .contact-details h3 { font-family:'Playfair Display',serif; font-size:1.3rem; margin-bottom:1.2rem; }
+    .info-row { display:flex; gap:1rem; padding:1rem 0; border-bottom:1px solid var(--border); }
+    .info-icon { color:var(--accent); flex-shrink:0; width:1.5rem; font-size:1rem; }
+    .info-text { font-size:0.85rem; color:var(--muted); line-height:1.5; }
+    .info-text strong { color:var(--text); font-weight:400; display:block; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.2rem; }
+
+    .contact-form { padding:2rem 1.5rem; }
+    .contact-form h3 { font-family:'Playfair Display',serif; font-size:1.3rem; margin-bottom:1.5rem; }
+    .form-group { margin-bottom:1.2rem; }
+    .form-group label { display:block; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.5rem; }
+    .form-group input, .form-group textarea, .form-group select { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:0; color:var(--text); font-family:'Jost',sans-serif; font-size:0.85rem; font-weight:300; padding:0.9rem 1rem; outline:none; transition:border-color 0.3s; -webkit-appearance:none; appearance:none; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color:var(--accent); }
+    .form-group textarea { resize:vertical; min-height:130px; }
+    .form-group select option { background:var(--surface); }
+    .btn-send { width:100%; padding:1rem; background:var(--accent); color:var(--bg); border:none; font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; }
+    .btn-send:hover { background:var(--accent2); }
+    .success-msg { display:none; margin-top:1rem; padding:1rem; border:1px solid var(--accent2); font-size:0.82rem; color:var(--accent2); text-align:center; letter-spacing:0.08em; }
+
+    .collab-sec { padding:2rem 1.5rem; border-top:1px solid var(--border); background:var(--surface); }
+    .collab-sec h3 { font-family:'Playfair Display',serif; font-size:1.3rem; margin-bottom:0.8rem; }
+    .collab-sec p { font-size:0.82rem; color:var(--muted); line-height:1.7; margin-bottom:1.2rem; }
+    .collab-tags { display:flex; flex-wrap:wrap; gap:0.5rem; }
+    .collab-tag { font-size:0.7rem; padding:0.3rem 0.8rem; border:1px solid var(--border); color:var(--muted); }
+
+    .social-sec { padding:2rem 1.5rem 4rem; border-top:1px solid var(--border); }
+    .social-sec h3 { font-family:'Playfair Display',serif; font-size:1.3rem; margin-bottom:1.2rem; }
+    .social-link { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; border-bottom:1px solid var(--border); text-decoration:none; color:var(--text); font-size:0.85rem; transition:color 0.3s; }
+    .social-link:hover { color:var(--accent); }
+    .social-link span:last-child { font-size:0.65rem; color:var(--muted); }
+
+    footer { padding:2rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.7rem; color:var(--muted); }
+    footer a { color:var(--muted); text-decoration:none; }
+    footer a:hover { color:var(--accent); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">HorizonChaser</a>
+  <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Acasă</a>
+  <a href="despre.html" onclick="toggleMenu()">Despre</a>
+  <a href="destinatii.html" onclick="toggleMenu()">Destinații</a>
+  <a href="blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="ghid.html" onclick="toggleMenu()">Ghid de Călătorie</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <p class="eyebrow">Ia Legătura</p>
+  <h1 class="page-title">Con<em>tact</em></h1>
+</div>
+
+<div class="contact-intro">
+  <p>Ai o întrebare despre un ghid, o propunere de colaborare sau vrei să îmi recomanzi o destinație pe care ar trebui s-o vizitez? Scrie-mi — răspund la fiecare mesaj în cel mult 48 de ore.</p>
+</div>
+
+<div class="contact-details">
+  <h3>Date de Contact</h3>
+  <div class="info-row">
+    <div class="info-icon">✉</div>
+    <div class="info-text"><strong>Email</strong>hello@horizonchaser.ro</div>
+  </div>
+  <div class="info-row">
+    <div class="info-icon">📍</div>
+    <div class="info-text"><strong>Baza de pornire</strong>București, România — dar rar acasă</div>
+  </div>
+  <div class="info-row">
+    <div class="info-icon">⏱</div>
+    <div class="info-text"><strong>Timp de Răspuns</strong>Maxim 48 de ore (uneori mai repede)</div>
+  </div>
+</div>
+
+<div class="contact-form">
+  <h3>Trimite un Mesaj</h3>
+  <div class="form-group">
+    <label>Numele Tău</label>
+    <input type="text" placeholder="Ion Popescu" id="nameInput">
+  </div>
+  <div class="form-group">
+    <label>Adresă de Email</label>
+    <input type="email" placeholder="email@exemplu.ro" id="emailInput">
+  </div>
+  <div class="form-group">
+    <label>Subiect</label>
+    <select id="subjectInput">
+      <option value="">Alege un subiect...</option>
+      <option>Întrebare despre un ghid</option>
+      <option>Propunere de colaborare</option>
+      <option>Recomandare de destinație</option>
+      <option>Feedback despre blog</option>
+      <option>Suport după cumpărare</option>
+      <option>Altele</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Mesaj</label>
+    <textarea placeholder="Scrie mesajul tău aici..." id="messageInput"></textarea>
+  </div>
+  <button class="btn-send" onclick="handleSubmit()">Trimite Mesajul</button>
+  <div class="success-msg" id="successMsg">✓ &nbsp; Mesajul a fost trimis! Îți voi răspunde în curând. Mulțumesc! 🌍</div>
+</div>
+
+<div class="collab-sec">
+  <h3>Colaborări</h3>
+  <p>Sunt deschis la colaborări cu branduri și servicii care se aliniază cu valorile blogului: travel autentic, experiențe reale, conținut de calitate. Nu promovez produse în care nu cred.</p>
+  <div class="collab-tags">
+    <span class="collab-tag">Cazări &amp; Hoteluri</span>
+    <span class="collab-tag">Echipamente de Călătorie</span>
+    <span class="collab-tag">Companii Aeriene</span>
+    <span class="collab-tag">Asigurări de Călătorie</span>
+    <span class="collab-tag">Aplicații de Travel</span>
+    <span class="collab-tag">Tururi &amp; Experiențe</span>
+  </div>
+</div>
+
+<div class="social-sec">
+  <h3>Urmărește-mă</h3>
+  <a href="#" class="social-link"><span>Instagram</span><span>@horizonchaser</span></a>
+  <a href="#" class="social-link"><span>YouTube</span><span>Vloguri de Călătorie</span></a>
+  <a href="#" class="social-link"><span>TikTok</span><span>@horizonchaser</span></a>
+  <a href="#" class="social-link"><span>Pinterest</span><span>HorizonChaser Travel</span></a>
+</div>
+
+<footer>
+  <span>© 2025 HorizonChaser</span>
+  <a href="ghid.html">Ghiduri Premium →</a>
+</footer>
+<script>
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+  function handleSubmit() {
+    const name = document.getElementById('nameInput').value;
+    const email = document.getElementById('emailInput').value;
+    const message = document.getElementById('messageInput').value;
+    if (!name || !email || !message) { alert('Te rog completează toate câmpurile obligatorii.'); return; }
+    document.getElementById('successMsg').style.display = 'block';
+    document.getElementById('nameInput').value = '';
+    document.getElementById('emailInput').value = '';
+    document.getElementById('messageInput').value = '';
+    document.getElementById('subjectInput').value = '';
+  }
+</script>
+</body>
+</html>

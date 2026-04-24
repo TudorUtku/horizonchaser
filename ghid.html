@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorizonChaser – Ghid de Călătorie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b1012; --surface:#111a1e; --accent:#e8a04a; --accent2:#5dbfb0; --text:#f0ede8; --muted:#7a8a8f; --border:#1e2d33; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(11,16,18,0.93); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--accent); text-decoration:none; }
+    .nav-toggle { display:flex; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .nav-toggle span { display:block; width:24px; height:1px; background:var(--text); }
+    .nav-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:99; flex-direction:column; justify-content:center; align-items:center; gap:2rem; }
+    .nav-menu.open { display:flex; }
+    .nav-menu a { font-family:'Playfair Display',serif; font-size:2rem; color:var(--text); text-decoration:none; transition:color 0.3s; }
+    .nav-menu a:hover { color:var(--accent); }
+    .nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; background:none; border:none; color:var(--text); }
+
+    .page-header { padding:8rem 1.5rem 3rem; border-bottom:1px solid var(--border); }
+    .eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,10vw,4rem); line-height:1; }
+    .page-title em { font-style:italic; color:var(--accent); }
+    .page-sub { font-size:0.85rem; color:var(--muted); line-height:1.7; margin-top:1rem; }
+
+    .intro { padding:2rem 1.5rem; border-bottom:1px solid var(--border); }
+    .intro p { font-size:0.85rem; line-height:1.8; color:var(--muted); }
+    .intro p strong { color:var(--text); font-weight:400; }
+
+    /* ONE-TIME GUIDES */
+    .products-sec { padding:2rem 1.5rem; }
+    .sec-label { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:1.5rem; }
+
+    .prod-card { border:1px solid var(--border); background:var(--surface); margin-bottom:1.5rem; overflow:hidden; }
+    .prod-img { width:100%; aspect-ratio:16/9; position:relative; overflow:hidden; }
+    .prod-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .prod-img-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; text-align:center; }
+    .pimph1 { background:linear-gradient(160deg,#0d2028,#0b1012); }
+    .pimph2 { background:linear-gradient(200deg,#1a1208,#0b1012); }
+    .pimph3 { background:linear-gradient(140deg,#1a0d08,#0b1012); }
+    .prod-badge { position:absolute; top:1rem; right:1rem; background:var(--accent); color:var(--bg); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 0.8rem; z-index:2; }
+    .prod-body { padding:1.5rem; }
+    .prod-dest { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.4rem; }
+    .prod-name { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:0.6rem; }
+    .prod-desc { font-size:0.82rem; color:var(--muted); line-height:1.7; margin-bottom:1.2rem; }
+    .prod-inc { margin-bottom:1.5rem; }
+    .prod-inc p { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:0.6rem; }
+    .prod-inc ul { list-style:none; }
+    .prod-inc ul li { font-size:0.8rem; color:var(--muted); padding:0.3rem 0; border-bottom:1px solid var(--border); }
+    .prod-inc ul li::before { content:'→  '; color:var(--accent); }
+    .prod-footer { display:flex; justify-content:space-between; align-items:center; }
+    .prod-price { font-family:'Playfair Display',serif; font-size:2rem; color:var(--accent); }
+    .prod-price span { font-size:0.8rem; color:var(--muted); font-family:'Jost',sans-serif; }
+    .btn-buy { padding:0.75rem 1.5rem; background:var(--accent); color:var(--bg); font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; border:none; cursor:pointer; transition:all 0.3s; }
+    .btn-buy:hover { background:var(--accent2); color:var(--bg); }
+
+    /* SUBSCRIPTION */
+    .sub-sec { margin:1.5rem; border:1px solid var(--accent); background:var(--surface); padding:2rem 1.5rem; }
+    .sub-eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
+    .sub-title { font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:1rem; }
+    .sub-price { font-family:'Playfair Display',serif; font-size:2.5rem; color:var(--accent); }
+    .sub-price span { font-size:0.9rem; color:var(--muted); font-family:'Jost',sans-serif; }
+    .sub-desc { font-size:0.82rem; color:var(--muted); line-height:1.7; margin:1rem 0 1.5rem; }
+    .sub-list { list-style:none; margin-bottom:1.5rem; }
+    .sub-list li { font-size:0.82rem; color:var(--muted); padding:0.4rem 0; border-bottom:1px solid var(--border); }
+    .sub-list li::before { content:'✓  '; color:var(--accent2); }
+    .btn-sub { display:block; width:100%; padding:1rem; background:none; border:1px solid var(--accent); color:var(--accent); font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; }
+    .btn-sub:hover { background:var(--accent); color:var(--bg); }
+
+    footer { padding:2rem 1.5rem; margin-top:2rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.7rem; color:var(--muted); }
+    footer a { color:var(--muted); text-decoration:none; }
+    footer a:hover { color:var(--accent); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">HorizonChaser</a>
+  <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Acasă</a>
+  <a href="despre.html" onclick="toggleMenu()">Despre</a>
+  <a href="destinatii.html" onclick="toggleMenu()">Destinații</a>
+  <a href="blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="ghid.html" onclick="toggleMenu()">Ghid de Călătorie</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <p class="eyebrow">Produse Digitale</p>
+  <h1 class="page-title">Ghid de<br><em>Călătorie</em></h1>
+  <p class="page-sub">Ghiduri PDF detaliate, create din experiență reală — nu copiate de pe internet.</p>
+</div>
+
+<div class="intro">
+  <p>Fiecare ghid este scris de mine, după ce am vizitat personal locul respectiv. Conține <strong>informații practice actuale</strong>, buget real, hărți adnotate, restaurante testate și sfaturi pe care nu le găsești în ghidurile turistice clasice. Descărcare digitală instantă după plată — <strong>plată unică, al tău pentru totdeauna</strong>.</p>
+</div>
+
+<div class="products-sec">
+  <p class="sec-label">Ghiduri PDF — Plată Unică</p>
+
+  <div class="prod-card">
+    <div class="prod-img">
+      <!-- IMAGINEA GHID 1: <img src="img/ghid1.jpg" alt="Ghid Japonia"> -->
+      <div class="prod-img-ph pimph1">Adaugă imaginea de copertă — Japonia</div>
+      <div class="prod-badge">Cel Mai Vândut</div>
+    </div>
+    <div class="prod-body">
+      <div class="prod-dest">Asia de Est</div>
+      <h2 class="prod-name">Ghidul Complet Japonia — 30 de zile</h2>
+      <p class="prod-desc">Un ghid de 80 de pagini cu tot ce ai nevoie pentru o lună în Japonia: itinerar zi cu zi, transport, cazare pe bugete diferite, expresii în japoneză și hărți adnotate.</p>
+      <div class="prod-inc">
+        <p>Ce conține</p>
+        <ul>
+          <li>Itinerar detaliat pe 30 de zile</li>
+          <li>Hărți PDF adnotate pentru 8 orașe</li>
+          <li>Lista de 50 restaurante verificate</li>
+          <li>Ghid complet JR Pass și transport</li>
+          <li>Buget real: economic, mediu, confort</li>
+          <li>Actualizat 2025</li>
+        </ul>
+      </div>
+      <div class="prod-footer">
+        <div class="prod-price">79 lei <span>plată unică</span></div>
+        <button class="btn-buy" onclick="alert('Integrare plată — de adăugat!')">Cumpără Acum</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="prod-card">
+    <div class="prod-img">
+      <!-- IMAGINEA GHID 2: <img src="img/ghid2.jpg" alt="Ghid Islanda"> -->
+      <div class="prod-img-ph pimph2">Adaugă imaginea de copertă — Islanda</div>
+    </div>
+    <div class="prod-body">
+      <div class="prod-dest">Europa de Nord</div>
+      <h2 class="prod-name">Islanda în 10 zile — Ghid cu Mașina</h2>
+      <p class="prod-desc">Road trip complet pe Ring Road: unde te oprești, ce nu trebuie să ratezi, cum să fotografiezi aurora boreală și cum să nu dai faliment în cea mai scumpă țară din Europa.</p>
+      <div class="prod-inc">
+        <p>Ce conține</p>
+        <ul>
+          <li>Ruta completă Ring Road (1.332 km)</li>
+          <li>Sfaturi pentru văzut aurora boreală</li>
+          <li>Campinguri și cazări recomandate</li>
+          <li>Buget real cu costuri 2025</li>
+          <li>Lista de echipamente esențiale</li>
+        </ul>
+      </div>
+      <div class="prod-footer">
+        <div class="prod-price">59 lei <span>plată unică</span></div>
+        <button class="btn-buy" onclick="alert('Integrare plată — de adăugat!')">Cumpără Acum</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="prod-card">
+    <div class="prod-img">
+      <!-- IMAGINEA GHID 3: <img src="img/ghid3.jpg" alt="Bundle Ghiduri"> -->
+      <div class="prod-img-ph pimph3">Adaugă imaginea bundle-ului</div>
+    </div>
+    <div class="prod-body">
+      <div class="prod-dest">Pachet Special</div>
+      <h2 class="prod-name">Bundle: Toate Ghidurile</h2>
+      <p class="prod-desc">Acces la toate ghidurile disponibile acum și la toate ghidurile viitoare. Economisești 50% față de cumpărarea separată.</p>
+      <div class="prod-inc">
+        <p>Ce conține</p>
+        <ul>
+          <li>Toate ghidurile actuale (5 ghiduri)</li>
+          <li>Acces la toate ghidurile viitoare</li>
+          <li>Acces la comunitatea privată Discord</li>
+          <li>Sesiune Q&amp;A lunară live</li>
+        </ul>
+      </div>
+      <div class="prod-footer">
+        <div class="prod-price">149 lei <span>plată unică</span></div>
+        <button class="btn-buy" onclick="alert('Integrare plată — de adăugat!')">Cumpără Acum</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABONAMENT -->
+<div class="sub-sec">
+  <p class="sub-eyebrow">Abonament Lunar</p>
+  <h2 class="sub-title">Clubul Călătorilor</h2>
+  <div class="sub-price">35 lei <span>/ lună</span></div>
+  <p class="sub-desc">Acces complet la toate ghidurile, articolele premium și o comunitate de călători cu aceleași valori. Poți anula oricând, fără penalizări.</p>
+  <ul class="sub-list">
+    <li>Acces nelimitat la toate ghidurile PDF</li>
+    <li>Articole premium exclusive (nedisponibile public)</li>
+    <li>Comunitate privată Discord de călători</li>
+    <li>Q&amp;A lunar cu Tudor — întrebări live</li>
+    <li>Reduceri la parteneri: cazări, echipamente</li>
+    <li>Anulare oricând, fără costuri ascunse</li>
+  </ul>
+  <button class="btn-sub" onclick="alert('Integrare abonament — de adăugat!')">Abonează-te Acum</button>
+</div>
+
+<footer>
+  <span>© 2025 HorizonChaser</span>
+  <a href="destinatii.html">Destinații →</a>
+</footer>
+<script>
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

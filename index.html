@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorizonChaser – Acasă</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b1012; --surface:#111a1e; --accent:#e8a04a; --accent2:#5dbfb0; --text:#f0ede8; --muted:#7a8a8f; --border:#1e2d33; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(11,16,18,0.93); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:400; color:var(--accent); text-decoration:none; letter-spacing:0.03em; }
+    .nav-toggle { display:flex; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .nav-toggle span { display:block; width:24px; height:1px; background:var(--text); transition:all 0.3s; }
+    .nav-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:99; flex-direction:column; justify-content:center; align-items:center; gap:2rem; }
+    .nav-menu.open { display:flex; }
+    .nav-menu a { font-family:'Playfair Display',serif; font-size:2rem; font-weight:400; color:var(--text); text-decoration:none; letter-spacing:0.05em; transition:color 0.3s; }
+    .nav-menu a:hover { color:var(--accent); }
+    .nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; background:none; border:none; color:var(--text); }
+
+    /* HERO */
+    .hero { min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; padding:2rem 1.5rem 4rem; position:relative; overflow:hidden; }
+    .hero-bg { position:absolute; inset:0; background:linear-gradient(180deg,#0b1012 0%,rgba(11,16,18,0.2) 40%,rgba(11,16,18,0.8) 100%); z-index:1; }
+    .hero-img { position:absolute; inset:0; }
+    .hero-img img { width:100%; height:100%; object-fit:cover; }
+    .hero-img-ph { width:100%; height:100%; background:linear-gradient(160deg,#0d2028 0%,#0b1012 50%,#1a1208 100%); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.8rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; text-align:center; padding:1rem; }
+    .hero-content { position:relative; z-index:2; }
+    .hero-tag { display:inline-block; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); border:1px solid var(--accent2); padding:0.3rem 0.8rem; margin-bottom:1.2rem; }
+    .hero-title { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,13vw,5.5rem); font-weight:400; line-height:1; margin-bottom:1rem; }
+    .hero-title em { font-style:italic; color:var(--accent); }
+    .hero-sub { font-size:0.85rem; line-height:1.7; color:rgba(240,237,232,0.7); max-width:300px; margin-bottom:2.5rem; }
+    .btn { display:inline-block; padding:0.85rem 2.2rem; background:var(--accent); color:var(--bg); font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; transition:all 0.3s; font-weight:400; }
+    .btn:hover { background:var(--accent2); }
+    .btn-outline { background:transparent; color:var(--accent); border:1px solid var(--accent); margin-left:1rem; }
+    .btn-outline:hover { background:var(--accent); color:var(--bg); }
+
+    /* STATS BAR */
+    .stats-bar { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--surface); }
+    .stat-cell { padding:1.5rem 1rem; text-align:center; border-right:1px solid var(--border); }
+    .stat-cell:last-child { border-right:none; }
+    .stat-num { font-family:'Playfair Display',serif; font-size:1.8rem; color:var(--accent); }
+    .stat-lbl { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-top:0.2rem; }
+
+    /* DESTINATIONS */
+    .dest-sec { padding:4rem 1.5rem; }
+    .sec-eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .sec-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,7vw,2.8rem); font-weight:400; line-height:1.1; margin-bottom:2rem; }
+    .dest-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+    .dest-card { position:relative; overflow:hidden; cursor:pointer; }
+    .dest-card:first-child { grid-column:1/-1; }
+    .dest-img { aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+    .dest-card:not(:first-child) .dest-img { aspect-ratio:1; }
+    .dest-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .dest-card:hover .dest-img img { transform:scale(1.05); }
+    .dest-img-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; text-align:center; }
+    .dph1 { background:linear-gradient(160deg,#0d2028,#0b1012); }
+    .dph2 { background:linear-gradient(200deg,#1a1208,#0b1012); }
+    .dph3 { background:linear-gradient(120deg,#0d1a20,#141808); }
+    .dest-info { padding:1rem 1.2rem; background:var(--surface); }
+    .dest-country { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); margin-bottom:0.3rem; }
+    .dest-name { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:400; }
+
+    /* FEATURED POST */
+    .featured-sec { background:var(--surface); padding:4rem 1.5rem; border-top:1px solid var(--border); }
+    .feat-img { width:100%; aspect-ratio:16/9; position:relative; overflow:hidden; margin-bottom:1.5rem; }
+    .feat-img img { width:100%; height:100%; object-fit:cover; }
+    .feat-img-ph { width:100%; height:100%; background:linear-gradient(135deg,#0d2028,#1a1208); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; }
+    .feat-tag { font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.7rem; }
+    .feat-title { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:400; line-height:1.2; margin-bottom:1rem; }
+    .feat-excerpt { font-size:0.85rem; line-height:1.8; color:var(--muted); margin-bottom:1.5rem; }
+    .read-more { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:2px; }
+
+    /* NEWSLETTER */
+    .newsletter { padding:4rem 1.5rem; border-top:1px solid var(--border); text-align:center; }
+    .newsletter h2 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:400; margin-bottom:0.8rem; }
+    .newsletter p { font-size:0.85rem; color:var(--muted); line-height:1.7; margin-bottom:2rem; }
+    .nl-form { display:flex; flex-direction:column; gap:0.8rem; }
+    .nl-input { padding:0.9rem 1rem; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:'Jost',sans-serif; font-size:0.85rem; outline:none; transition:border-color 0.3s; }
+    .nl-input:focus { border-color:var(--accent); }
+    .nl-btn { padding:0.9rem; background:var(--accent); color:var(--bg); border:none; font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:background 0.3s; }
+    .nl-btn:hover { background:var(--accent2); }
+
+    footer { padding:2rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:var(--muted); }
+    footer a { color:var(--muted); text-decoration:none; }
+    footer a:hover { color:var(--accent); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">HorizonChaser</a>
+  <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Acasă</a>
+  <a href="despre.html" onclick="toggleMenu()">Despre</a>
+  <a href="destinatii.html" onclick="toggleMenu()">Destinații</a>
+  <a href="blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="ghid.html" onclick="toggleMenu()">Ghid de Călătorie</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<section class="hero">
+  <div class="hero-img">
+    <!-- IMAGINEA HERO: înlocuiește div-ul de mai jos cu <img src="img/hero.jpg" alt="Hero"> -->
+    <div class="hero-img-ph">Pune o fotografie de peisaj spectaculos aici</div>
+  </div>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-tag">Blog de Călătorii</span>
+    <h1 class="hero-title">Urmărind<br><em>Orizontul</em></h1>
+    <p class="hero-sub">Povești din colțuri uitate ale lumii, sfaturi practice și fotografii care îți vor aprinde dorința de a călători.</p>
+    <a href="destinatii.html" class="btn">Explorează Destinații</a>
+    <a href="despre.html" class="btn btn-outline">Despre Mine</a>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-cell">
+    <div class="stat-num">34</div>
+    <div class="stat-lbl">Țări Vizitate</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">120+</div>
+    <div class="stat-lbl">Articole Scrise</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">5</div>
+    <div class="stat-lbl">Ani pe Drum</div>
+  </div>
+</div>
+
+<div class="dest-sec">
+  <p class="sec-eyebrow">Destinații</p>
+  <h2 class="sec-title">Locuri care<br>m-au schimbat</h2>
+  <div class="dest-grid">
+    <div class="dest-card">
+      <div class="dest-img">
+        <!-- IMAGINEA DESTINAȚIE 1: <img src="img/dest1.jpg" alt="Japonia"> -->
+        <div class="dest-img-ph dph1">Fotografia destinației 1</div>
+      </div>
+      <div class="dest-info">
+        <div class="dest-country">Asia de Est</div>
+        <div class="dest-name">Japonia — Între trecut și viitor</div>
+      </div>
+    </div>
+    <div class="dest-card">
+      <div class="dest-img">
+        <!-- IMAGINEA DESTINAȚIE 2: <img src="img/dest2.jpg" alt="Maroc"> -->
+        <div class="dest-img-ph dph2">Fotografia destinației 2</div>
+      </div>
+      <div class="dest-info">
+        <div class="dest-country">Africa de Nord</div>
+        <div class="dest-name">Maroc</div>
+      </div>
+    </div>
+    <div class="dest-card">
+      <div class="dest-img">
+        <!-- IMAGINEA DESTINAȚIE 3: <img src="img/dest3.jpg" alt="Islanda"> -->
+        <div class="dest-img-ph dph3">Fotografia destinației 3</div>
+      </div>
+      <div class="dest-info">
+        <div class="dest-country">Europa de Nord</div>
+        <div class="dest-name">Islanda</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="featured-sec">
+  <p class="sec-eyebrow">Articol Recomandat</p>
+  <div class="feat-img">
+    <!-- IMAGINEA ARTICOL RECOMANDAT: <img src="img/featured.jpg" alt="Articol recomandat"> -->
+    <div class="feat-img-ph">Fotografia articolului recomandat</div>
+  </div>
+  <p class="feat-tag">Japonia · 15 Noiembrie 2024</p>
+  <h2 class="feat-title">30 de zile în Japonia: tot ce nu îți spune ghidul turistic</h2>
+  <p class="feat-excerpt">Am ajuns în Tokyo cu un rucsac, un JR Pass și zero așteptări clare. Am plecat cu 3.000 de fotografii, amintiri imposibil de descris în cuvinte și o înțelegere profundă a faptului că unele locuri nu pot fi înțelese — doar trăite.</p>
+  <a href="blog.html" class="read-more">Citește Articolul Complet</a>
+</div>
+
+<div class="newsletter">
+  <p class="sec-eyebrow">Newsletter</p>
+  <h2>Nu rata nicio destinație</h2>
+  <p>Primești în fiecare lună: un articol de călătorie, sfaturi practice și oferte exclusive de pe blog direct în inbox-ul tău.</p>
+  <div class="nl-form">
+    <input class="nl-input" type="email" placeholder="adresa@email.ro" id="nlEmail">
+    <button class="nl-btn" onclick="subscribeNL()">Abonează-mă Gratuit</button>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 HorizonChaser</span>
+  <a href="ghid.html">Ghid Premium →</a>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+  function subscribeNL() {
+    const e = document.getElementById('nlEmail').value;
+    if (!e) { alert('Introdu adresa de email.'); return; }
+    alert('Te-ai abonat cu succes! Bine ai venit în comunitate 🌍');
+    document.getElementById('nlEmail').value = '';
+  }
+</script>
+</body>
+</html>

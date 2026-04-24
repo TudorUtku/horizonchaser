@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorizonChaser – Despre Mine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b1012; --surface:#111a1e; --accent:#e8a04a; --accent2:#5dbfb0; --text:#f0ede8; --muted:#7a8a8f; --border:#1e2d33; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(11,16,18,0.93); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:400; color:var(--accent); text-decoration:none; }
+    .nav-toggle { display:flex; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .nav-toggle span { display:block; width:24px; height:1px; background:var(--text); }
+    .nav-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:99; flex-direction:column; justify-content:center; align-items:center; gap:2rem; }
+    .nav-menu.open { display:flex; }
+    .nav-menu a { font-family:'Playfair Display',serif; font-size:2rem; color:var(--text); text-decoration:none; transition:color 0.3s; }
+    .nav-menu a:hover { color:var(--accent); }
+    .nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; background:none; border:none; color:var(--text); }
+
+    .page-header { padding:8rem 1.5rem 3rem; border-bottom:1px solid var(--border); }
+    .eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,10vw,4rem); font-weight:400; line-height:1; }
+    .page-title em { font-style:italic; color:var(--accent); }
+
+    .hero-banner { width:100%; padding:4rem 1.5rem; background:linear-gradient(135deg,#0d2028 0%,#0b1012 50%,#1a1208 100%); border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+    .hero-banner::before { content:''; position:absolute; inset:0; background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px); background-size:40px 40px; opacity:0.2; }
+    .hero-banner-content { position:relative; z-index:1; }
+    .hero-banner-label { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:1rem; }
+    .hero-banner-name { font-family:'Playfair Display',serif; font-size:clamp(3rem,14vw,6rem); font-weight:400; line-height:0.9; color:var(--text); }
+    .hero-banner-name em { font-style:italic; color:var(--accent); display:block; }
+    .hero-banner-tagline { margin-top:1.5rem; font-size:0.85rem; color:var(--muted); line-height:1.7; max-width:300px; }
+    .hero-banner-badges { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.5rem; }
+    .hero-badge { font-size:0.65rem; padding:0.3rem 0.8rem; border:1px solid var(--accent2); color:var(--accent2); letter-spacing:0.1em; }
+
+    .about-body { padding:2.5rem 1.5rem; }
+    .about-body h2 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:400; margin-bottom:1.2rem; }
+    .about-body p { color:var(--muted); line-height:1.9; font-size:0.9rem; margin-bottom:1.2rem; }
+    .about-body p strong { color:var(--text); font-weight:400; }
+
+    .quote-block { margin:0 1.5rem 2.5rem; padding:2rem; border-left:3px solid var(--accent); background:var(--surface); }
+    .quote-block p { font-family:'Playfair Display',serif; font-size:1.2rem; font-style:italic; color:var(--text); line-height:1.6; }
+    .quote-block span { display:block; margin-top:0.8rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); }
+
+    .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin:0 1.5rem 2.5rem; border:1px solid var(--border); }
+    .stat-box { background:var(--surface); padding:1.5rem 1rem; text-align:center; }
+    .stat-n { font-family:'Playfair Display',serif; font-size:2.2rem; color:var(--accent); }
+    .stat-l { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-top:0.3rem; }
+
+    .visited-sec { padding:2rem 1.5rem 1rem; border-top:1px solid var(--border); }
+    .visited-sec h3 { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:400; margin-bottom:1.2rem; }
+    .continent { margin-bottom:1.5rem; }
+    .continent-name { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .countries { display:flex; flex-wrap:wrap; gap:0.5rem; }
+    .country-tag { font-size:0.75rem; padding:0.3rem 0.8rem; border:1px solid var(--border); color:var(--muted); }
+
+    .btn { display:inline-block; padding:0.85rem 2.2rem; background:var(--accent); color:var(--bg); font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; transition:all 0.3s; margin:1rem 1.5rem 3rem; }
+    .btn:hover { background:var(--accent2); }
+
+    footer { padding:2rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.7rem; color:var(--muted); }
+    footer a { color:var(--muted); text-decoration:none; }
+    footer a:hover { color:var(--accent); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">HorizonChaser</a>
+  <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Acasă</a>
+  <a href="despre.html" onclick="toggleMenu()">Despre</a>
+  <a href="destinatii.html" onclick="toggleMenu()">Destinații</a>
+  <a href="blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="ghid.html" onclick="toggleMenu()">Ghid de Călătorie</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <p class="eyebrow">Povestea Mea</p>
+  <h1 class="page-title">Despre<br><em>Mine</em></h1>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-banner-content">
+    <p class="hero-banner-label">Călător · Fotograf · Povestitor</p>
+    <div class="hero-banner-name">Tudor<em>Ogrendil</em></div>
+    <p class="hero-banner-tagline">Din București spre lume — cu rucsacul în spate și curiozitatea înainte.</p>
+    <div class="hero-banner-badges">
+      <span class="hero-badge">34 de țări</span>
+      <span class="hero-badge">6 continente</span>
+      <span class="hero-badge">5 ani pe drum</span>
+      <span class="hero-badge">120+ articole</span>
+    </div>
+  </div>
+</div>
+
+<div class="about-body">
+  <h2>Bună, eu sunt Tudor.</h2>
+  <p>Sunt un călător din București care a decis acum 5 ani să schimbe rutina cu orizonturi necunoscute. Ceea ce a început cu un zbor spontan spre Lisabona s-a transformat într-o viață construită în jurul <strong>explorării, curiozității și libertății de mișcare</strong>.</p>
+  <p>Am traversat 34 de țări, am dormit în corturi și hoteluri de 5 stele, am mâncat insecte în Bangkok și croissante perfecte în Paris. Fiecare experiență m-a schimbat câte puțin. Pe blogul acesta încerc să <strong>capturez esența fiecărui loc</strong> — nu în ghiduri turistice sterile, ci în povești reale, cu emoție și detalii pe care nu le găsești pe nicăieri altundeva.</p>
+  <p>Fotografiez tot ce văd, editez cu grijă fiecare imagine și scriu sincer despre ceea ce am trăit — inclusiv momentele mai puțin glorioase. Călătoria autentică nu este mereu frumoasă. Dar este mereu <strong>reală</strong>.</p>
+</div>
+
+<div class="quote-block">
+  <p>„Nu călătorești ca să scapi de viață — călătorești ca să înveți să trăiești mai bine."</p>
+  <span>— Tudor, HorizonChaser</span>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-box"><div class="stat-n">34</div><div class="stat-l">Țări Vizitate</div></div>
+  <div class="stat-box"><div class="stat-n">5</div><div class="stat-l">Ani pe Drum</div></div>
+  <div class="stat-box"><div class="stat-n">120+</div><div class="stat-l">Articole Publicate</div></div>
+  <div class="stat-box"><div class="stat-n">6</div><div class="stat-l">Continente</div></div>
+</div>
+
+<div class="visited-sec">
+  <h3>Unde am fost</h3>
+  <div class="continent">
+    <div class="continent-name">Europa</div>
+    <div class="countries">
+      <span class="country-tag">Portugalia</span><span class="country-tag">Spania</span><span class="country-tag">Italia</span><span class="country-tag">Franța</span><span class="country-tag">Grecia</span><span class="country-tag">Islanda</span><span class="country-tag">Norvegia</span><span class="country-tag">Croația</span>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="continent-name">Asia</div>
+    <div class="countries">
+      <span class="country-tag">Japonia</span><span class="country-tag">Thailanda</span><span class="country-tag">Vietnam</span><span class="country-tag">India</span><span class="country-tag">Georgia</span>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="continent-name">Africa &amp; Orientul Mijlociu</div>
+    <div class="countries">
+      <span class="country-tag">Maroc</span><span class="country-tag">Tanzania</span><span class="country-tag">Iordania</span>
+    </div>
+  </div>
+  <div class="continent">
+    <div class="continent-name">America</div>
+    <div class="countries">
+      <span class="country-tag">SUA</span><span class="country-tag">Mexic</span><span class="country-tag">Columbia</span><span class="country-tag">Peru</span>
+    </div>
+  </div>
+</div>
+
+<a href="destinatii.html" class="btn">Vezi Toate Destinațiile</a>
+
+<footer>
+  <span>© 2025 HorizonChaser</span>
+  <a href="ghid.html">Ghid Premium →</a>
+</footer>
+<script>
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>

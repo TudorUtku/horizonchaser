@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorizonChaser – Destinații</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b1012; --surface:#111a1e; --accent:#e8a04a; --accent2:#5dbfb0; --text:#f0ede8; --muted:#7a8a8f; --border:#1e2d33; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(11,16,18,0.93); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--accent); text-decoration:none; }
+    .nav-toggle { display:flex; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .nav-toggle span { display:block; width:24px; height:1px; background:var(--text); }
+    .nav-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:99; flex-direction:column; justify-content:center; align-items:center; gap:2rem; }
+    .nav-menu.open { display:flex; }
+    .nav-menu a { font-family:'Playfair Display',serif; font-size:2rem; color:var(--text); text-decoration:none; transition:color 0.3s; }
+    .nav-menu a:hover { color:var(--accent); }
+    .nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; background:none; border:none; color:var(--text); }
+
+    .page-header { padding:8rem 1.5rem 3rem; border-bottom:1px solid var(--border); }
+    .eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,10vw,4rem); line-height:1; }
+    .page-title em { font-style:italic; color:var(--accent); }
+    .page-sub { font-size:0.85rem; color:var(--muted); line-height:1.7; margin-top:1rem; }
+
+    .filter-bar { padding:1.5rem; display:flex; gap:0.8rem; overflow-x:auto; border-bottom:1px solid var(--border); scrollbar-width:none; }
+    .filter-bar::-webkit-scrollbar { display:none; }
+    .fbtn { flex-shrink:0; padding:0.5rem 1.2rem; border:1px solid var(--border); background:none; color:var(--muted); font-family:'Jost',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; transition:all 0.3s; }
+    .fbtn.active, .fbtn:hover { border-color:var(--accent); color:var(--accent); }
+
+    .dest-list { padding:2rem 0; }
+    .dest-item { display:grid; grid-template-columns:1fr; border-bottom:1px solid var(--border); }
+    .dest-item-img { aspect-ratio:16/9; position:relative; overflow:hidden; }
+    .dest-item-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .dest-item:hover .dest-item-img img { transform:scale(1.04); }
+    .dest-item-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; text-align:center; }
+    .diph1 { background:linear-gradient(160deg,#0d2028,#0b1012); }
+    .diph2 { background:linear-gradient(200deg,#1a1208,#0b1012); }
+    .diph3 { background:linear-gradient(140deg,#0d1a20,#141808); }
+    .diph4 { background:linear-gradient(180deg,#1a0d08,#0b1012); }
+    .diph5 { background:linear-gradient(220deg,#0d200d,#0b1012); }
+    .dest-item-body { padding:1.5rem; background:var(--surface); }
+    .dest-item-continent { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.4rem; }
+    .dest-item-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:400; margin-bottom:0.6rem; }
+    .dest-item-desc { font-size:0.82rem; color:var(--muted); line-height:1.7; margin-bottom:1rem; }
+    .dest-item-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1rem; }
+    .tag { font-size:0.65rem; padding:0.25rem 0.7rem; border:1px solid var(--border); color:var(--muted); }
+    .dest-item-footer { display:flex; justify-content:space-between; align-items:center; }
+    .dest-item-articles { font-size:0.7rem; color:var(--muted); letter-spacing:0.1em; }
+    .read-btn { font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:2px; }
+
+    footer { padding:2rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.7rem; color:var(--muted); }
+    footer a { color:var(--muted); text-decoration:none; }
+    footer a:hover { color:var(--accent); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">HorizonChaser</a>
+  <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Acasă</a>
+  <a href="despre.html" onclick="toggleMenu()">Despre</a>
+  <a href="destinatii.html" onclick="toggleMenu()">Destinații</a>
+  <a href="blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="ghid.html" onclick="toggleMenu()">Ghid de Călătorie</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <p class="eyebrow">Lumea Explorată</p>
+  <h1 class="page-title">Desti<em>nații</em></h1>
+  <p class="page-sub">34 de țări, 6 continente — fiecare cu propria sa poveste, aromă și lumină.</p>
+</div>
+
+<div class="filter-bar">
+  <button class="fbtn active">Toate</button>
+  <button class="fbtn">Europa</button>
+  <button class="fbtn">Asia</button>
+  <button class="fbtn">Africa</button>
+  <button class="fbtn">America</button>
+  <button class="fbtn">Oceania</button>
+</div>
+
+<div class="dest-list">
+
+  <div class="dest-item">
+    <div class="dest-item-img">
+      <!-- IMAGINEA JAPONIA: <img src="img/japonia.jpg" alt="Japonia"> -->
+      <div class="dest-item-ph diph1">Adaugă fotografia — Japonia</div>
+    </div>
+    <div class="dest-item-body">
+      <div class="dest-item-continent">Asia de Est</div>
+      <h2 class="dest-item-name">Japonia</h2>
+      <p class="dest-item-desc">O țară care îți pune mintea pe jar: temple vechi de secole coexistând cu roboți și mâncare dintr-un automat. Am petrecut 30 de zile și nu am văzut nici jumătate din ce are de oferit.</p>
+      <div class="dest-item-tags"><span class="tag">Cultură</span><span class="tag">Mâncare</span><span class="tag">Natură</span><span class="tag">Orașe</span></div>
+      <div class="dest-item-footer">
+        <span class="dest-item-articles">4 articole</span>
+        <a href="blog.html" class="read-btn">Citește →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dest-item">
+    <div class="dest-item-img">
+      <!-- IMAGINEA ISLANDA: <img src="img/islanda.jpg" alt="Islanda"> -->
+      <div class="dest-item-ph diph2">Adaugă fotografia — Islanda</div>
+    </div>
+    <div class="dest-item-body">
+      <div class="dest-item-continent">Europa de Nord</div>
+      <h2 class="dest-item-name">Islanda</h2>
+      <p class="dest-item-desc">Gheysere, aurora boreală, cascade care cad din cerul cenușiu, drumuri care duc spre nicăieri. Islanda este planeta noastră în starea ei cea mai brută și mai impresionantă.</p>
+      <div class="dest-item-tags"><span class="tag">Natură</span><span class="tag">Aurora</span><span class="tag">Aventură</span><span class="tag">Fotografii</span></div>
+      <div class="dest-item-footer">
+        <span class="dest-item-articles">3 articole</span>
+        <a href="blog.html" class="read-btn">Citește →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dest-item">
+    <div class="dest-item-img">
+      <!-- IMAGINEA MAROC: <img src="img/maroc.jpg" alt="Maroc"> -->
+      <div class="dest-item-ph diph3">Adaugă fotografia — Maroc</div>
+    </div>
+    <div class="dest-item-body">
+      <div class="dest-item-continent">Africa de Nord</div>
+      <h2 class="dest-item-name">Maroc</h2>
+      <p class="dest-item-desc">Medine labirintice, deșert roșu la răsărit, parfum de condimente și ceai cu mentă. Marocul este un asalt senzorial total — și unul dintre cele mai fotografiate locuri pe care le-am vizitat.</p>
+      <div class="dest-item-tags"><span class="tag">Deșert</span><span class="tag">Cultură</span><span class="tag">Gastronomie</span><span class="tag">Piețe</span></div>
+      <div class="dest-item-footer">
+        <span class="dest-item-articles">2 articole</span>
+        <a href="blog.html" class="read-btn">Citește →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dest-item">
+    <div class="dest-item-img">
+      <!-- IMAGINEA PERU: <img src="img/peru.jpg" alt="Peru"> -->
+      <div class="dest-item-ph diph4">Adaugă fotografia — Peru</div>
+    </div>
+    <div class="dest-item-body">
+      <div class="dest-item-continent">America de Sud</div>
+      <h2 class="dest-item-name">Peru</h2>
+      <p class="dest-item-desc">Machu Picchu este doar vârful aisbergului. Peru este Amazonul, lacul Titicaca, Lima gastronomică și oamenii Quechua care trăiesc la 4.000 de metri altitudine ca și cum nimic nu ar fi deosebit.</p>
+      <div class="dest-item-tags"><span class="tag">Inca</span><span class="tag">Natură</span><span class="tag">Trekking</span><span class="tag">Altitudine</span></div>
+      <div class="dest-item-footer">
+        <span class="dest-item-articles">3 articole</span>
+        <a href="blog.html" class="read-btn">Citește →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="dest-item">
+    <div class="dest-item-img">
+      <!-- IMAGINEA GEORGIA: <img src="img/georgia.jpg" alt="Georgia"> -->
+      <div class="dest-item-ph diph5">Adaugă fotografia — Georgia</div>
+    </div>
+    <div class="dest-item-body">
+      <div class="dest-item-continent">Asia Centrală / Europa de Est</div>
+      <h2 class="dest-item-name">Georgia</h2>
+      <p class="dest-item-desc">Cel mai subestimat loc pe care l-am vizitat. Munți cu sate medievale, vin natural servit în cupe de lut, și ospitalitatea care îți demonstrează că generozitatea există încă în lume.</p>
+      <div class="dest-item-tags"><span class="tag">Munți</span><span class="tag">Vin</span><span class="tag">Ospitalitate</span><span class="tag">Budget</span></div>
+      <div class="dest-item-footer">
+        <span class="dest-item-articles">2 articole</span>
+        <a href="blog.html" class="read-btn">Citește →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>© 2025 HorizonChaser</span>
+  <a href="ghid.html">Ghid Premium →</a>
+</footer>
+<script>
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+  document.querySelectorAll('.fbtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

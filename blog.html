@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorizonChaser – Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0b1012; --surface:#111a1e; --accent:#e8a04a; --accent2:#5dbfb0; --text:#f0ede8; --muted:#7a8a8f; --border:#1e2d33; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; overflow-x:hidden; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(11,16,18,0.93); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--accent); text-decoration:none; }
+    .nav-toggle { display:flex; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .nav-toggle span { display:block; width:24px; height:1px; background:var(--text); }
+    .nav-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:var(--bg); z-index:99; flex-direction:column; justify-content:center; align-items:center; gap:2rem; }
+    .nav-menu.open { display:flex; }
+    .nav-menu a { font-family:'Playfair Display',serif; font-size:2rem; color:var(--text); text-decoration:none; transition:color 0.3s; }
+    .nav-menu a:hover { color:var(--accent); }
+    .nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; background:none; border:none; color:var(--text); }
+
+    .page-header { padding:8rem 1.5rem 3rem; border-bottom:1px solid var(--border); }
+    .eyebrow { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,10vw,4rem); line-height:1; }
+    .page-title em { font-style:italic; color:var(--accent); }
+
+    /* FEATURED POST */
+    .featured { border-bottom:1px solid var(--border); }
+    .feat-img { width:100%; aspect-ratio:16/9; position:relative; overflow:hidden; }
+    .feat-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .feat-img-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; text-align:center; }
+    .fph1 { background:linear-gradient(160deg,#0d2028,#0b1012); }
+    .feat-badge { position:absolute; top:1rem; left:1rem; z-index:2; background:var(--accent); color:var(--bg); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 0.8rem; }
+    .feat-body { padding:1.5rem; background:var(--surface); }
+    .feat-meta { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent2); margin-bottom:0.6rem; }
+    .feat-title { font-family:'Playfair Display',serif; font-size:1.6rem; line-height:1.2; margin-bottom:0.8rem; }
+    .feat-excerpt { font-size:0.85rem; color:var(--muted); line-height:1.8; margin-bottom:1.2rem; }
+    .read-more { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:2px; }
+
+    /* POST LIST */
+    .post-card { border-bottom:1px solid var(--border); }
+    .post-img { width:100%; aspect-ratio:16/9; position:relative; overflow:hidden; }
+    .post-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 0.4s; }
+    .post-card:hover .post-img img { transform:scale(1.03); }
+    .post-img-ph { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:0.7rem; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; text-align:center; }
+    .pph2 { background:linear-gradient(200deg,#1a1208,#0b1012); }
+    .pph3 { background:linear-gradient(140deg,#0d1a20,#141808); }
+    .pph4 { background:linear-gradient(180deg,#1a0d08,#0b1012); }
+    .post-body { padding:1.5rem; }
+    .post-meta { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.6rem; display:flex; gap:0.8rem; }
+    .post-meta span { color:var(--accent2); }
+    .post-title { font-family:'Playfair Display',serif; font-size:1.4rem; line-height:1.2; margin-bottom:0.8rem; }
+    .post-excerpt { font-size:0.83rem; color:var(--muted); line-height:1.8; margin-bottom:1.2rem; }
+
+    footer { padding:2rem 1.5rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.7rem; color:var(--muted); }
+    footer a { color:var(--muted); text-decoration:none; }
+    footer a:hover { color:var(--accent); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">HorizonChaser</a>
+  <button class="nav-toggle" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Acasă</a>
+  <a href="despre.html" onclick="toggleMenu()">Despre</a>
+  <a href="destinatii.html" onclick="toggleMenu()">Destinații</a>
+  <a href="blog.html" onclick="toggleMenu()">Blog</a>
+  <a href="ghid.html" onclick="toggleMenu()">Ghid de Călătorie</a>
+  <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<div class="page-header">
+  <p class="eyebrow">Povești de pe Drum</p>
+  <h1 class="page-title">Blogul<br><em>Meu</em></h1>
+</div>
+
+<!-- ARTICOL RECOMANDAT -->
+<div class="featured">
+  <div class="feat-img">
+    <!-- IMAGINEA ARTICOL 1: <img src="img/blog1.jpg" alt="Japonia 30 zile"> -->
+    <div class="feat-img-ph fph1">Adaugă fotografia articolului principal</div>
+    <div class="feat-badge">Recomandat</div>
+  </div>
+  <div class="feat-body">
+    <div class="feat-meta">Japonia · 15 Noiembrie 2024</div>
+    <h2 class="feat-title">30 de zile în Japonia: tot ce nu îți spune ghidul turistic</h2>
+    <p class="feat-excerpt">Am ajuns în Tokyo cu un rucsac, un JR Pass și zero așteptări clare. Am plecat cu 3.000 de fotografii, amintiri imposibil de descris în cuvinte și o înțelegere profundă a faptului că unele locuri nu pot fi înțelese — doar trăite. Iată ce am descoperit dincolo de Senso-ji și Shibuya Crossing.</p>
+    <a href="#" class="read-more">Citește Articolul Complet</a>
+  </div>
+</div>
+
+<!-- ARTICOLELE -->
+<article class="post-card">
+  <div class="post-img">
+    <!-- IMAGINEA ARTICOL 2: <img src="img/blog2.jpg" alt="Islanda"> -->
+    <div class="post-img-ph pph2">Adaugă fotografia articolului 2</div>
+  </div>
+  <div class="post-body">
+    <div class="post-meta"><span>Islanda</span> · 3 Octombrie 2024</div>
+    <h2 class="post-title">Aurora boreală cu ochii mei: ghid complet pentru văzut aurora în Islanda</h2>
+    <p class="post-excerpt">Noaptea de 23 septembrie 2024 o să rămână înscrisă în memoria mea pentru totdeauna. La 11 seara, în mijlocul câmpului, cerul s-a aprins în verde și violet. Îți explic cum să planifici și tu această experiență — inclusiv cum am editat fotografiile pentru a capta culorile reale.</p>
+    <a href="#" class="read-more">Citește Articolul</a>
+  </div>
+</article>
+
+<article class="post-card">
+  <div class="post-img">
+    <!-- IMAGINEA ARTICOL 3: <img src="img/blog3.jpg" alt="Maroc"> -->
+    <div class="post-img-ph pph3">Adaugă fotografia articolului 3</div>
+  </div>
+  <div class="post-body">
+    <div class="post-meta"><span>Maroc</span> · 12 August 2024</div>
+    <h2 class="post-title">5 zile în Maroc cu 300 de euro: posibil sau mit?</h2>
+    <p class="post-excerpt">Marocul are reputația unui loc ieftin, dar realitatea e mai nuanțată. Îți prezint bugetul meu real, zi cu zi, inclusiv cazare, mâncare și transport — plus sfaturile care m-au ajutat să economisesc fără să sacrific experiența.</p>
+    <a href="#" class="read-more">Citește Articolul</a>
+  </div>
+</article>
+
+<article class="post-card">
+  <div class="post-img">
+    <!-- IMAGINEA ARTICOL 4: <img src="img/blog4.jpg" alt="Georgia"> -->
+    <div class="post-img-ph pph4">Adaugă fotografia articolului 4</div>
+  </div>
+  <div class="post-body">
+    <div class="post-meta"><span>Georgia</span> · 5 Iulie 2024</div>
+    <h2 class="post-title">Georgia — destinația pe care toți o ignoră și nimeni nu o uită</h2>
+    <p class="post-excerpt">Când le spuneam prietenilor că merg în Georgia, mulți credeau că mă duc în statul american. Georgia, țara din Caucaz, este poate cea mai subestimată destinație europeană — cu munți ca în Elveția, mâncare ca în Mediterana și prețuri ca în România anilor 2000.</p>
+    <a href="#" class="read-more">Citește Articolul</a>
+  </div>
+</article>
+
+<footer>
+  <span>© 2025 HorizonChaser</span>
+  <a href="ghid.html">Ghid Premium →</a>
+</footer>
+<script>
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>
